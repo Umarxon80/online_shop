@@ -3,7 +3,22 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import secr  from "../config/dotenv.config.js";
 import { AuthValidator } from "../validation/auth.validator.js";
+import { totp } from "otplib";
+import nodemailer from "nodemailer"
+import { emailValidator } from "../validation/email.validator.js";
+
+
 let JWT_SECRET=secr.JWT_SECRET
+
+
+const emailTransporter=nodemailer.createTransport({
+  service:"gmail",
+  auth:{
+    user:"umarhonsultanov3@gmail.com",
+    pass:"ngon afkb ufzm gbdb"
+  }
+})
+
 
 export const register = async (req, res) => {
   const { email, password } = req.body;
@@ -43,5 +58,26 @@ export const login=async (req,res)=>{
 }
 
 export const sendmail=async (req,res)=>{
-  res.send("hello world")
+  let {email}=req.body
+  let {value,error}=emailValidator.validate(email)
+  const otp=totp.generate(email+JWT_SECRET)
+  if (error) {
+    return res.status(400).send({message:error.details[0].message})
+  }
+  try {
+    await emailTransporter.sendMail({
+      from:"umarhonsultanov3@gmail.com",
+      to:email,
+      subject:"Verification",
+      text:`your otp code ${otp}`
+    })
+    res.send("send to email")
+  } catch (e) {
+    res.status(400).send({message:e.message})
+  }
+}
+export const verifyemail = async(req,res)=>{
+  const {email,otp}=req.body  
+  const verify=totp.check(otp,email+JWT_SECRET)
+  res.send({verify})
 }
