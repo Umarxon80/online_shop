@@ -1,14 +1,11 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
-import secr  from "../config/dotenv.config.js";
+import {JWT_SECRET}  from "../config/dotenv.config.js";
 import { AuthValidator } from "../validation/auth.validator.js";
 import { totp } from "otplib";
 import nodemailer from "nodemailer"
 import { emailValidator } from "../validation/email.validator.js";
-
-
-let JWT_SECRET=secr.JWT_SECRET
 
 
 const emailTransporter=nodemailer.createTransport({
@@ -18,6 +15,16 @@ const emailTransporter=nodemailer.createTransport({
     pass:"ngon afkb ufzm gbdb"
   }
 })
+
+export const getUsers=async (req,res)=>{
+ try {
+  let users=await User.find()
+  res.send(users)
+ } catch (e) {
+  res.status(400).send({message:e.message})
+}
+  
+}
 
 
 export const register = async (req, res) => {
@@ -50,7 +57,7 @@ export const login=async (req,res)=>{
     if (!acsess) {
       return res.status(400).send("incorrect password")
     }
-    let token=jwt.sign({id:check._id},JWT_SECRET,{expiresIn:"1h"})
+    let token=jwt.sign({id:check._id,role:check.role},JWT_SECRET,{expiresIn:"1h"})
     res.send(token)
   } catch (e) {
     res.status(400).send({message:e.message})

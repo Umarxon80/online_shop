@@ -1,5 +1,4 @@
 import Product from "../models/product.model.js";
-import secr from "../config/dotenv.config.js";
 import { ProductUpdateValidator, ProductValidator } from "../validation/product.validator.js";
 import path, { join } from "path";
 import fs from "fs";
@@ -16,6 +15,17 @@ export const GetAllProducts = async (req, res) => {
     res.status(500).send({ message: "Server error" });
   }
 };
+
+export const GetOneProducts = async (req, res) => {
+  let {id}=req.params
+  try {
+    const product = await Product.findOne({_id:id});
+    res.status(200).send(product);
+  } catch (error) {
+    res.status(500).send({ message: "Server error" });
+  }
+};
+
 
 export const GetProductPhoto = (req, res) => {
   const { id } = req.params;

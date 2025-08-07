@@ -1,9 +1,9 @@
 import express from "express";
 import connectDB from "./database/mongodb.js";
-import config  from "./config/dotenv.config.js";
+import {PORT}  from "./config/dotenv.config.js";
 import authRoutes from "./routes/auth.routes.js";
 import ProductRouter from "./routes/product.routes.js";
-const PORT = config.PORT;
+
 const app = express();
 import path from "path";
 import { fileURLToPath } from "url";
