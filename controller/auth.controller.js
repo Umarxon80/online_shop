@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
-import {JWT_SECRET}  from "../config/dotenv.config.js";
+import {EMAIL_PASS, EMAIL_USER, JWT_SECRET}  from "../config/dotenv.config.js";
 import { AuthValidator } from "../validation/auth.validator.js";
 import { totp } from "otplib";
 import nodemailer from "nodemailer"
@@ -11,8 +11,8 @@ import { emailValidator } from "../validation/email.validator.js";
 const emailTransporter=nodemailer.createTransport({
   service:"gmail",
   auth:{
-    user:"umarhonsultanov3@gmail.com",
-    pass:"ngon afkb ufzm gbdb"
+    user:EMAIL_USER,
+    pass:EMAIL_PASS
   }
 })
 
@@ -36,7 +36,7 @@ export const register = async (req, res) => {
   try {
     let check=await User.findOne({email})
     if (check) {
-      return res.send("Such user already exists")
+      return res.status(409).send("Such user already exists")
     }
   let nUser=new User(req.body)
   await nUser.save()

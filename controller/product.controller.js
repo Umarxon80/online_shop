@@ -18,8 +18,14 @@ export const GetAllProducts = async (req, res) => {
 
 export const GetOneProducts = async (req, res) => {
   let {id}=req.params
+  if (!product) {
+    return res.status(404).send({ message: "Product not found" });
+  }
   try {
     const product = await Product.findOne({_id:id});
+    if (!product) {
+      return res.status(404).send({ message: "Product not found" });
+    }    
     res.status(200).send(product);
   } catch (error) {
     res.status(500).send({ message: "Server error" });
@@ -53,7 +59,7 @@ export const CreateProducts = async (req, res) => {
   nline = new Product(value);
   try {
     await nline.save();
-    res.send(nline);
+    res.status(201).send(nline);
   } catch (e) {
     res.status(400).send({ message: e.message });
   }
@@ -67,6 +73,9 @@ export const ChangeProduct = async (req, res) => {
 }
   try {
     let savedproduct = await Product.findByIdAndUpdate(id, value, { new: true });
+    if (!savedproduct) {
+      return res.status(404).send({ message: "Product not found" });
+    }    
     res.send(savedproduct);
   } catch (e) {
     res.status(400).send({ message: e.message });

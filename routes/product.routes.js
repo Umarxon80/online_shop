@@ -5,15 +5,15 @@ import { role } from "../middleware/role.js";
 
 const ProductRouter=Router()
 
-ProductRouter.get("",GetAllProducts)
-ProductRouter.get("/:id",role(["admin","user"]),GetOneProducts)
 ProductRouter.get("/uploads/:id",GetProductPhoto)
+ProductRouter.get("",GetAllProducts)
 
 
 ProductRouter.post("",role(["admin"]), upload.single("img"),CreateProducts)
-ProductRouter.patch("/update/:id",role(["admin"]), upload.none(),ChangeProduct)
-ProductRouter.patch("/updatephoto/:id",role(["admin"]),upload.single("img"),ChangeProductPhoto)
-ProductRouter.delete("/delete/:id",role(["admin"]),DeleteProduct)
+ProductRouter.patch("/:id",role(["admin"]), upload.none(),ChangeProduct)
+ProductRouter.patch("/photo/:id",role(["admin"]),upload.single("img"),ChangeProductPhoto)
+ProductRouter.delete("/:id",role(["admin"]),DeleteProduct)
 
+ProductRouter.get("/:id",role(["admin","user"]),GetOneProducts)
 
 export default ProductRouter
