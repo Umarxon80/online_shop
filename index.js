@@ -4,7 +4,7 @@ import {PORT}  from "./config/dotenv.config.js";
 import authRoutes from "./routes/auth.routes.js";
 import ProductRouter from "./routes/product.routes.js";
 import cors from "cors";
-import cors from "cors";
+const app = express();
 
 // Allow Netlify domain
 app.use(cors({
@@ -13,9 +13,6 @@ app.use(cors({
   credentials: true // if you use cookies
 }));
 
-
-const app = express();
-app.use(cors());
 import path from "path";
 import { fileURLToPath } from "url";
 
