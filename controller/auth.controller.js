@@ -51,7 +51,7 @@ export const login=async (req,res)=>{
   try {
     let check=await User.findOne({email})
     if (!check) {
-      return res.send("Such user doesn't exists")
+      return res.status(400).send("Such user doesn't exists")
     }
     let acsess=bcrypt.compareSync(password,check.password)
     if (!acsess) {
