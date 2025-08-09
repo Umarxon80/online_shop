@@ -4,6 +4,15 @@ import {PORT}  from "./config/dotenv.config.js";
 import authRoutes from "./routes/auth.routes.js";
 import ProductRouter from "./routes/product.routes.js";
 import cors from "cors";
+import cors from "cors";
+
+// Allow Netlify domain
+app.use(cors({
+  origin: "https://onlin1eshop.netlify.app",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true // if you use cookies
+}));
+
 
 const app = express();
 app.use(cors());
